@@ -1,5 +1,7 @@
 import galleryItems from './gallery-items.js';
 
+// Создание и рендер разметки по массиву данных и предоставленному шаблону.
+
 const galleryEl = document.querySelector('.gallery');
 
 const newGallery = galleryItems.map(element => {
@@ -23,3 +25,33 @@ const newGallery = galleryItems.map(element => {
 });
 
 galleryEl.append(...newGallery);
+
+// Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
+const ModalWindowEl = document.querySelector('.lightbox');
+// console.log(ModalWindowEl);
+galleryEl.addEventListener('click', onGalleryElClick);
+
+function onGalleryElClick(event) {
+    event.preventDefault();
+
+    const imageEl = event.target;
+    console.dir(imageEl);
+
+    // if (target.nodeName !== "A") return;
+    // imageEl.addEventListener('click', onOpenModalWindowClick);
+    
+    onOpenModalWindowClick()
+}
+function onOpenModalWindowClick() {
+        ModalWindowEl.classList.add('is-open');
+    }
+
+// function setActiveLink(nextActiveLink) {
+//   const currentActiveLink = nav.querySelector("a.active");
+
+//   if (currentActiveLink) {
+//     currentActiveLink.classList.remove("active");
+//   }
+
+//   nextActiveLink.classList.add("active");
+// }
