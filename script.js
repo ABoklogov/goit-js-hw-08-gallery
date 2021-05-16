@@ -27,25 +27,42 @@ const newGallery = galleryItems.map(element => {
 galleryEl.append(...newGallery);
 
 // Реализация делегирования на галерее ul.js-gallery и получение url большого изображения.
-const ModalWindowEl = document.querySelector('.lightbox');
-// console.log(ModalWindowEl);
+const modalWindowEl = document.querySelector('.lightbox');
+const imageOriginalEl = document.querySelector('.lightbox__image');
+const buttonCloseEl = document.querySelector('[data-action="close-lightbox"]');
+
 galleryEl.addEventListener('click', onGalleryElClick);
 
 function onGalleryElClick(event) {
     event.preventDefault();
 
-    const imageEl = event.target;
-    console.dir(imageEl);
+    const srcOriginalImage = event.target.dataset.source;
+    const altOriginalImage = event.target.attributes.alt.value;
+    // console.dir(altOriginalImage);
 
     // if (target.nodeName !== "A") return;
     // imageEl.addEventListener('click', onOpenModalWindowClick);
     
-    onOpenModalWindowClick()
-}
-function onOpenModalWindowClick() {
-        ModalWindowEl.classList.add('is-open');
-    }
+    onOpenModalWindowClick();
 
+    onOpenImage(srcOriginalImage, altOriginalImage);
+
+    buttonCloseEl.addEventListener('click', onCloseImageClick);
+
+};
+
+function onOpenModalWindowClick() {
+    modalWindowEl.classList.add('is-open');
+};
+
+function onOpenImage(src, alt) {
+    imageOriginalEl.attributes.src.value = src;
+    imageOriginalEl.attributes.alt.value = alt;
+}
+
+function onCloseImageClick() {
+    modalWindowEl.classList.remove('is-open');
+}
 // function setActiveLink(nextActiveLink) {
 //   const currentActiveLink = nav.querySelector("a.active");
 
