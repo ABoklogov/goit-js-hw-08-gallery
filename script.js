@@ -28,7 +28,6 @@ const newGallery = galleryItems.map(element => {
 
 galleryEl.append(...newGallery);
 
-
 galleryEl.addEventListener('click', onGalleryElClick);
 
 function onGalleryElClick(event) {
@@ -38,43 +37,45 @@ function onGalleryElClick(event) {
 
     let srcOriginalImage = event.target.dataset.source;
     let altOriginalImage = event.target.attributes.alt.value;
-
-    //---------------------------------------------------------
-    // let srcNextOriginalImage = event.target.parentNode.parentNode.nextSibling.firstChild.firstChild.dataset.source;
-    // let altNextOriginalImage = event.target.parentNode.parentNode.nextSibling.firstChild.firstChild.attributes.alt.value;
-    // console.log(srcNextOriginalImage);
-    // console.log(altNextOriginalImage);
-    //----------------------------------------------------------
-
+    
     onOpenModalWindowClick();
 
     onOpenImage(srcOriginalImage, altOriginalImage);
 
     buttonCloseEl.addEventListener('click', onCloseImageClick);
 
-    overlayEl.addEventListener('click', onOverlayClick);
+    overlayEl.addEventListener('click', onCloseImageClick);
 
-    window.addEventListener('keydown', event => {
-        if (event.key === "Escape") {
-            modalWindowEl.classList.remove('is-open')
-        }
-    });
+    window.addEventListener('keydown', onEscapeKeydown);
 
 
     // window.addEventListener('keydown', onFlippingImagesClick);
 
     // function onFlippingImagesClick(event) {
+        
     //     if (event.key === "ArrowLeft") {
         
     //     } else if (event.key === "ArrowRight") {
-    //         onOpenImage(srcNextOriginalImage, altNextOriginalImage); 
+    //         galleryItems.forEach((el, i, arr) => {
+                
+    //             let len = arr.length;
+    //             let current = arr[i].original;
+    //             let previous = arr[(i+len-1)%len].original;
+    //             let next = arr[(i + 1) % len].original;
+                
+    //             if (el.original === srcOriginalImage) {
+                
+    //                 onOpenImage(next);
+    //                 srcOriginalImage = next;
+    //             }
+    //         });
     //     } 
     // }
 };
 
 function onOpenModalWindowClick() {
     modalWindowEl.classList.add('is-open');
-    imageOriginalEl.attributes.src.value = '';
+    
 };
 
 function onOpenImage(src, alt) {
@@ -84,14 +85,15 @@ function onOpenImage(src, alt) {
 
 function onCloseImageClick() {
     modalWindowEl.classList.remove('is-open');
+    imageOriginalEl.attributes.src.value = '';
+
+    buttonCloseEl.removeEventListener('click', onCloseImageClick);
+    overlayEl.removeEventListener('click', onCloseImageClick);
+    window.removeEventListener('keydown', onEscapeKeydown);
 };
 
-function onOverlayClick(event) {
-    if (event.target) {
+function onEscapeKeydown(event) {
+    if (event.key === "Escape") {
         onCloseImageClick()
-    };
+    }
 };
-
-
-
-
