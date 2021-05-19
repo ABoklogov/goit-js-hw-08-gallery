@@ -5,8 +5,9 @@ const modalWindowEl = document.querySelector('.lightbox');
 const imageOriginalEl = document.querySelector('.lightbox__image');
 const buttonCloseEl = document.querySelector('[data-action="close-lightbox"]');
 const overlayEl = document.querySelector('.lightbox__overlay');
+let indexImage;
 
-const newGallery = galleryItems.map(element => {
+const newGallery = galleryItems.map((element, index) => {
     const itemEl = document.createElement('li');
     itemEl.classList.add('gallery__item');
 
@@ -19,6 +20,7 @@ const newGallery = galleryItems.map(element => {
     imgEl.setAttribute('src', `${element.preview}`);
     imgEl.setAttribute('data-source', `${element.original}`);
     imgEl.setAttribute('alt', `${element.description}`);
+    imgEl.setAttribute('data-index', index);
 
     linkEl.appendChild(imgEl);
     itemEl.appendChild(linkEl);
@@ -35,8 +37,9 @@ function onGalleryElClick(event) {
 
     if (event.target.nodeName !== "IMG") return;
 
-    let srcOriginalImage = event.target.dataset.source;
-    let altOriginalImage = event.target.attributes.alt.value;
+    indexImage = Number(event.target.dataset.index);
+    const srcOriginalImage = event.target.dataset.source;
+    const altOriginalImage = event.target.attributes.alt.value;
     
     onOpenModalWindowClick();
 
@@ -48,34 +51,11 @@ function onGalleryElClick(event) {
 
     window.addEventListener('keydown', onEscapeKeydown);
 
-
-    // window.addEventListener('keydown', onFlippingImagesClick);
-
-    // function onFlippingImagesClick(event) {
-        
-    //     if (event.key === "ArrowLeft") {
-        
-    //     } else if (event.key === "ArrowRight") {
-    //         galleryItems.forEach((el, i, arr) => {
-                
-    //             let len = arr.length;
-    //             let current = arr[i].original;
-    //             let previous = arr[(i+len-1)%len].original;
-    //             let next = arr[(i + 1) % len].original;
-                
-    //             if (el.original === srcOriginalImage) {
-                
-    //                 onOpenImage(next);
-    //                 srcOriginalImage = next;
-    //             }
-    //         });
-    //     } 
-    // }
+    window.addEventListener('keydown', onFlippingImagesClick);
 };
 
 function onOpenModalWindowClick() {
     modalWindowEl.classList.add('is-open');
-    
 };
 
 function onOpenImage(src, alt) {
@@ -90,10 +70,22 @@ function onCloseImageClick() {
     buttonCloseEl.removeEventListener('click', onCloseImageClick);
     overlayEl.removeEventListener('click', onCloseImageClick);
     window.removeEventListener('keydown', onEscapeKeydown);
+    window.removeEventListener('keydown', onFlippingImagesClick);
 };
 
 function onEscapeKeydown(event) {
     if (event.key === "Escape") {
         onCloseImageClick()
     }
+};
+
+function onFlippingImagesClick(event) {
+        
+    if (event.key === "ArrowLeft") {
+        indexImage = indexImage > 0 ? indexImage -= 1 : galleryItems.length - 1;
+    } else if (event.key === "ArrowRight") {
+        indexImage = indexImage < galleryItems.length - 1 ? indexImage += 1 : 0;
+    } else { return };
+
+    onOpenImage(galleryItems[indexImage].original, galleryItems[indexImage].description);
 };
