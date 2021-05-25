@@ -7,7 +7,7 @@ const buttonCloseEl = document.querySelector('[data-action="close-lightbox"]');
 const overlayEl = document.querySelector('.lightbox__overlay');
 let indexImage;
 
-const newGallery = galleryItems.map((element, index) => {
+export const newGallery = galleryItems.map((element, index) => {
     const itemEl = document.createElement('li');
     itemEl.classList.add('gallery__item');
 

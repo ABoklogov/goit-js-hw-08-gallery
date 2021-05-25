@@ -1,0 +1,1 @@
+import newGallery from './src/js/script'
