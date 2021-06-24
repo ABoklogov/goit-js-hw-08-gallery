@@ -1,1 +1,1 @@
-import newGallery from './src/js/script'
+import { newGallery } from './src/js/script.js'
